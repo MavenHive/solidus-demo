@@ -8,6 +8,7 @@ gem 'pg', '~> 0.15'
 
 gem 'solidus'
 gem 'solidus_auth_devise'
+gem 'solidus_multi_domain'
 
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 5.0'

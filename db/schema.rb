@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160119064018) do
+ActiveRecord::Schema.define(version: 20160119073463) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -461,6 +461,14 @@ ActiveRecord::Schema.define(version: 20160119064018) do
   add_index "spree_products", ["slug"], name: "index_spree_products_on_slug", using: :btree
   add_index "spree_products", ["slug"], name: "permalink_idx_unique", unique: true, using: :btree
 
+  create_table "spree_products_stores", id: false, force: :cascade do |t|
+    t.integer "product_id"
+    t.integer "store_id"
+  end
+
+  add_index "spree_products_stores", ["product_id"], name: "index_spree_products_stores_on_product_id", using: :btree
+  add_index "spree_products_stores", ["store_id"], name: "index_spree_products_stores_on_store_id", using: :btree
+
   create_table "spree_products_taxons", force: :cascade do |t|
     t.integer "product_id"
     t.integer "taxon_id"
@@ -523,6 +531,14 @@ ActiveRecord::Schema.define(version: 20160119064018) do
   add_index "spree_promotion_rules", ["product_group_id"], name: "index_promotion_rules_on_product_group_id", using: :btree
   add_index "spree_promotion_rules", ["promotion_id"], name: "index_spree_promotion_rules_on_promotion_id", using: :btree
   add_index "spree_promotion_rules", ["user_id"], name: "index_promotion_rules_on_user_id", using: :btree
+
+  create_table "spree_promotion_rules_stores", id: false, force: :cascade do |t|
+    t.integer "promotion_rule_id"
+    t.integer "store_id"
+  end
+
+  add_index "spree_promotion_rules_stores", ["promotion_rule_id"], name: "index_spree_promotion_rules_stores_on_promotion_rule_id", using: :btree
+  add_index "spree_promotion_rules_stores", ["store_id"], name: "index_spree_promotion_rules_stores_on_store_id", using: :btree
 
   create_table "spree_promotion_rules_users", force: :cascade do |t|
     t.integer  "user_id"
@@ -940,6 +956,16 @@ ActiveRecord::Schema.define(version: 20160119064018) do
   add_index "spree_store_payment_methods", ["payment_method_id"], name: "index_spree_store_payment_methods_on_payment_method_id", using: :btree
   add_index "spree_store_payment_methods", ["store_id"], name: "index_spree_store_payment_methods_on_store_id", using: :btree
 
+  create_table "spree_store_shipping_methods", force: :cascade do |t|
+    t.integer  "store_id"
+    t.integer  "shipping_method_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "spree_store_shipping_methods", ["shipping_method_id"], name: "index_spree_store_shipping_methods_on_shipping_method_id", using: :btree
+  add_index "spree_store_shipping_methods", ["store_id"], name: "index_spree_store_shipping_methods_on_store_id", using: :btree
+
   create_table "spree_stores", force: :cascade do |t|
     t.string   "name"
     t.string   "url"
@@ -952,6 +978,7 @@ ActiveRecord::Schema.define(version: 20160119064018) do
     t.boolean  "default",           default: false, null: false
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "logo_file_name"
   end
 
   add_index "spree_stores", ["code"], name: "index_spree_stores_on_code", using: :btree
@@ -988,9 +1015,11 @@ ActiveRecord::Schema.define(version: 20160119064018) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "position",   default: 0
+    t.integer  "store_id"
   end
 
   add_index "spree_taxonomies", ["position"], name: "index_spree_taxonomies_on_position", using: :btree
+  add_index "spree_taxonomies", ["store_id"], name: "index_spree_taxonomies_on_store_id", using: :btree
 
   create_table "spree_taxons", force: :cascade do |t|
     t.integer  "parent_id"
@@ -1031,6 +1060,7 @@ ActiveRecord::Schema.define(version: 20160119064018) do
     t.boolean  "active",       default: true
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "store_id"
   end
 
   create_table "spree_transfer_items", force: :cascade do |t|
